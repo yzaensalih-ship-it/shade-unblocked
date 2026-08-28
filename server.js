@@ -8,8 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const bare = createBareServer('/bare/');
 
-// Serves files from the current root folder where your index.html lives
-app.use(express.static('.'));
+app.use(express.static('public'));
 app.use('/scramjet/', express.static(scramjetPath));
 
 app.use((req, res) => {
