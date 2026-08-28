@@ -1,3 +1,4 @@
+```json
 {
   "name": "shade-proxy",
   "version": "1.0.0",
@@ -8,8 +9,9 @@
   },
   "dependencies": {
     "@mercuryworkshop/scramjet": "latest",
+    "@mercuryworkshop/wisp-js": "latest",
     "@tomphttp/bare-server-node": "latest",
-    "express": "latest",
-    "wisp-js-server": "latest"
+    "express": "latest"
   }
 }
+```
