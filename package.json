@@ -1,0 +1,15 @@
+{
+  "name": "shade-proxy",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@mercuryworkshop/scramjet": "latest",
+    "@tomphttp/bare-server-node": "latest",
+    "express": "latest",
+    "wisp-js-server": "latest"
+  }
+}
