@@ -27,7 +27,6 @@ window.addEventListener('load', async () => {
 
 async function go() {
     const query = input.value.trim();
-
     if (!query) {
         input.focus();
         return;
@@ -49,7 +48,6 @@ async function go() {
 }
 
 button.addEventListener("click", go);
-
 input.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
