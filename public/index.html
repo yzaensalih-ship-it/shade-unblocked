@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -160,7 +159,7 @@
             <input
                 id="urlInput"
                 type="text"
-                placeholder="Enter a URL..."
+                placeholder="Enter a URL or search DuckDuckGo..."
                 autocomplete="off"
                 spellcheck="false"
             >
@@ -197,48 +196,12 @@
     </script>
 
 
-    <!-- Shade URL handling -->
-    <script>
-        const input = document.getElementById("urlInput");
-        const button = document.getElementById("goButton");
+    <!-- Scramjet CDN scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.codecs.js"></script>
 
-        function go() {
-
-            const url = input.value.trim();
-
-            if (!url) {
-                input.focus();
-                return;
-            }
-
-            /*
-             * The URL is NOT opened directly.
-             *
-             * This is where your proxy connection
-             * can be added later.
-             */
-
-            console.log("URL entered:", url);
-        }
-
-
-        /* GO button */
-        button.addEventListener("click", go);
-
-
-        /* Enter key */
-        input.addEventListener("keydown", function(event) {
-
-            if (event.key === "Enter") {
-
-                event.preventDefault();
-
-                go();
-            }
-
-        });
-    </script>
+    <!-- External script handling -->
+    <script src="/script.js"></script>
 
 </body>
 </html>
-```
