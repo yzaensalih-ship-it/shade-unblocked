@@ -1,35 +1,56 @@
-import express from 'express';
-import http from 'http';
-import { createBareServer } from '@tomphttp/bare-server-node';
-import { scramjetPath } from '@mercuryworkshop/scramjet';
-import { handleWisp } from 'wisp-js-server';
+const input = document.getElementById("urlInput");
+const button = document.getElementById("goButton");
 
-const app = express();
-const server = http.createServer(app);
-const bare = createBareServer('/bare/');
+window.__scramjet$config = {
+    prefix: '/service/',
+    codec: 'xor',
+    files: {
+        wasm: 'https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.wasm.js',
+        worker: 'https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.worker.js',
+        client: 'https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.client.js',
+        bundle: 'https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.bundle.js',
+        config: 'https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.config.js',
+    }
+};
 
-app.use(express.static('public'));
-app.use('/scramjet/', express.static(scramjetPath));
-
-app.use((req, res) => {
-    if (bare.shouldRoute(req)) {
-        bare.route(req, res);
-    } else {
-        res.status(404).send('Not found');
+window.addEventListener('load', async () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            await navigator.serviceWorker.register('https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@latest/dist/scramjet.sw.js', {
+                scope: __scramjet$config.prefix
+            });
+        } catch (err) {
+            console.error("Service Worker registration failed:", err);
+        }
     }
 });
 
-server.on('upgrade', (req, socket, head) => {
-    if (bare.shouldRoute(req)) {
-        bare.routeUpgrade(req, socket, head);
-    } else if (req.url.endsWith('/wisp/')) {
-        handleWisp(req, socket, head);
-    } else {
-        socket.destroy();
+async function go() {
+    const query = input.value.trim();
+    if (!query) {
+        input.focus();
+        return;
     }
-});
 
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-    console.log(`Shade proxy server running on port ${PORT}`);
+    let targetUrl;
+    try {
+        if (query.includes(".") && !query.includes(" ")) {
+            targetUrl = query.startsWith("http") ? query : `https://${query}`;
+        } else {
+            targetUrl = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+        }
+    } catch (e) {
+        targetUrl = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+    }
+
+    const encodedUrl = __scramjet$config.prefix + __scramjet.encodeUrl(targetUrl);
+    window.location.href = encodedUrl;
+}
+
+button.addEventListener("click", go);
+input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        go();
+    }
 });
